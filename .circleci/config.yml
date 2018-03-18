@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           key: *gradle_cache_key
-      - run: gradle wrapper --gradle-version 3.3
+      - run: gradle wrapper --gradle-version 4.6
       - run: ./gradlew test
       - run: ./gradlew shadowJar
       - run:

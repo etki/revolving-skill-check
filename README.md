@@ -27,7 +27,7 @@ opinion. To build the project, you will need to execute following
 commands (assuming Gradle is already installed on machine):
 
 ```bash
-gradle wrapper --gradle-version 3.3
+gradle wrapper --gradle-version 4.6
 gradle shadowJar
 ```
 
