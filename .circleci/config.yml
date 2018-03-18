@@ -1,0 +1,26 @@
+parameters:
+  gradle:
+    cache_key: &gradle_cache_key gradle-{{ checksum "build.gradle" }}
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    working_directory: /tmp/workspace
+    steps:
+      - checkout
+      - restore_cache:
+          key: *gradle_cache_key
+      - run: gradle wrapper --gradle-version 3.3
+      - run: ./gradlew test
+      - run: ./gradlew shadowJar
+      - run:
+          command: ./bin/console serve
+          background: true
+      - run: ./bin/console await
+      - run: ./gradlew integrationTest
+      - run: ./bin/console shutdown
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: *gradle_cache_key
