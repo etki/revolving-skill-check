@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 PROJECT_ROOT="$(readlink -f "$(dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
 JAR="$(find "$PROJECT_ROOT"/build -name '*-shadow.jar')"

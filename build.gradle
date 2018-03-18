@@ -14,7 +14,6 @@ repositories {
 }
 
 ext {
-    undertowVersion = '2.0.1.Final'
     guiceVersion = '4.2.0'
     lombokVersion = '1.16.20'
     slf4jVersion = '1.7.25'
@@ -24,6 +23,7 @@ ext {
     vertXVersion = '3.5.1'
     governatorVersion = '1.17.5'
     asyncHttpClientVersion = '2.4.4'
+    airlineVersion = '2.3.0'
 }
 
 jar {
@@ -39,8 +39,6 @@ shadowJar {
 }
 
 dependencies {
-    compile group: 'io.undertow', name: 'undertow-core', version: undertowVersion
-    compile group: 'io.undertow', name: 'undertow-servlet', version: undertowVersion
     compile group: 'com.google.inject', name: 'guice', version: guiceVersion
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
@@ -49,6 +47,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-web', version: vertXVersion
     compile group: 'com.netflix.governator', name: 'governator', version: governatorVersion
     compile group: 'org.asynchttpclient', name: 'async-http-client', version: asyncHttpClientVersion
+    compile group: 'com.github.rvesse', name: 'airline', version: airlineVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
