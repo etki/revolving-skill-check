@@ -1,0 +1,353 @@
+openapi: '3.0.1'
+info:
+  version: 1.0.0
+  title: Money Transfer Service API
+components:
+  schemas:
+    JsonProblem:
+      properties:
+        type:
+          type: string
+          format: uri
+          default: 'about:blank'
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    JsonProblem.Invalid:
+      allOf:
+        - $ref: '#/components/schemas/JsonProblem'
+        - properties:
+            violations:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+    IdTrait:
+      required: [id]
+      properties:
+        id:
+          type: string
+          format: uuid
+    PageMetadata:
+      properties:
+        total:
+          type: integer
+        size:
+          type: integer
+        pages:
+          type: integer
+        page:
+          type: integer
+    AccountData:
+      required: [currency]
+      properties:
+        balance:
+          type: string
+          format: decimal
+          default: '0'
+        currency:
+          type: string
+    Account:
+      allOf:
+        - $ref: '#/components/schemas/IdTrait'
+        - $ref: '#/components/schemas/AccountData'
+    AccountPage:
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+    CurrencyId:
+      type: string
+      minLength: 2
+      maxLength: 10
+    Rate:
+      properties:
+        source:
+          $ref: '#/components/schemas/CurrencyId'
+        target:
+          $ref: '#/components/schemas/CurrencyId'
+        value:
+          type: string
+          format: decimal
+    RatePage:
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+    TransferData:
+      required: [source, target, amount, currency]
+      properties:
+        source:
+          type: string
+          format: uuid
+        target:
+          type: string
+          format: uuid
+        amount:
+          type: string
+          format: decimal
+        currency:
+          type: string
+    Transfer:
+      allOf:
+        - $ref: '#/components/schemas/IdTrait'
+        - $ref: '#/components/schemas/TransferData'
+    TransferPage:
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+    HealthColorEnum:
+      type: string
+      enum: [GREEN, YELLOW, RED]
+    ServiceHealth:
+      properties:
+        color:
+          $ref: '#/components/schemas/HealthColorEnum'
+    DecimalValuePayload:
+      required: [value]
+      properties:
+        value:
+          type: string
+          format: decimal
+  parameters:
+    path.id:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    query.page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        default: 1
+    query.size:
+      in: query
+      name: size
+      schema:
+        type: integer
+        default: 32
+  requestBodies:
+    DecimalValue:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DecimalValuePayload'
+    Transfer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransferData'
+    Account:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountData'
+  responses:
+    404:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/JsonProblem'
+    400.Invalid:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/JsonProblem.Invalid'
+    Account:
+      description: Single account
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Account'
+    AccountPage:
+      description: Account listing page
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountPage'
+    Transfer:
+      description: Single transfer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transfer'
+    TransferPage:
+      description: Page full of transfers
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransferPage'
+    Rate:
+      description: Single exchange rate
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Rate'
+    RatePage:
+      description: Exchange rate listing page
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RatePage'
+paths:
+  /_health:
+    get:
+      summary: Service health
+      responses:
+        200:
+          description: Operational service response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceHealth'
+        503:
+          description: Non-operational service response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceHealth'
+  /_openapi/schema.yml:
+    get:
+      summary: Current schema
+      responses:
+        200:
+          description: Service OpenAPI schema
+  /_openapi/ui:
+    get:
+      summary: UI for service schema
+      responses:
+        200:
+          description: This very HTML document
+  /account:
+    get:
+      summary: Account listing
+      parameters:
+        - $ref: '#/components/parameters/query.page'
+        - $ref: '#/components/parameters/query.size'
+      responses:
+        200:
+          $ref: '#/components/responses/AccountPage'
+        404:
+          $ref: '#/components/schemas/responses/404'
+    post:
+      summary: Account creation
+      requestBody:
+        $ref: '#/components/requestBodies/Account'
+      responses:
+        200:
+          $ref: '#/components/responses/Account'
+        400:
+          $ref: '#/components/responses/400.Invalid'
+  /account/{id}:
+    parameters:
+      - $ref: '#/components/parameters/path.id'
+    get:
+      summary: Account fetching
+      responses:
+        200:
+          $ref: '#/components/responses/Account'
+        404:
+          $ref: '#/components/responses/404'
+  /account/{id}/balance:
+    parameters:
+      - $ref: '#/components/parameters/path.id'
+    patch:
+      summary: Account balance alteration
+      requestBody:
+        $ref: '#/components/requestBodies/DecimalValue'
+      responses:
+        200:
+          $ref: '#/components/responses/Account'
+        404:
+          $ref: '#/components/responses/404'
+  /rate:
+    get:
+      summary: Rate listing
+      parameters:
+        - $ref: '#/components/parameters/query.page'
+        - $ref: '#/components/parameters/query.size'
+      responses:
+        200:
+          $ref: '#/components/responses/RatePage'
+        404:
+          $ref: '#/components/responses/404'
+  /rate/{source}/{target}:
+    parameters:
+      - name: source
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: target
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Exchange rate fetching
+      responses:
+        200:
+          $ref: '#/components/responses/Rate'
+        404:
+          $ref: '#/components/responses/404'
+    put:
+      summary: Exchange rate setting
+      requestBody:
+        $ref: '#/components/requestBodies/DecimalValue'
+      responses:
+        200:
+          $ref: '#/components/responses/Rate'
+        400:
+          $ref: '#/components/responses/400.Invalid'
+  /transfer:
+    get:
+      summary: Transfer listing
+      parameters:
+        - $ref: '#/components/parameters/query.page'
+        - $ref: '#/components/parameters/query.size'
+      responses:
+        200:
+          $ref: '#/components/responses/TransferPage'
+        404:
+          $ref: '#/components/responses/404'
+    post:
+      summary: Transfer creation
+      requestBody:
+        $ref: '#/components/requestBodies/Transfer'
+      responses:
+        200:
+          $ref: '#/components/responses/Transfer'
+        400:
+          $ref: '#/components/responses/400.Invalid'
+  /transfer/{id}:
+    parameters:
+      - $ref: '#/components/parameters/path.id'
+    get:
+      summary: Transfer fetching
+      responses:
+        200:
+          $ref: '#/components/responses/Transfer'
+        404:
+          $ref: '#/components/responses/404'

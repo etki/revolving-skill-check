@@ -17,6 +17,7 @@ So implicit requirements are
 - Money transfer is an atomic operation, so mind your isolation levels
 if using SQL-alike database and choose your strategy wisely if using any 
 other store where operation atomicity doesn't span across entities.
+- Transfer should be rejected if there's not enough money.
 - Also don't use floats, doubles and other non-exact stuff.
 
 ## Building
@@ -43,7 +44,7 @@ tests against provided address.
 
 ## API
 
-Available to inspect via `/_swagger/ui` endpoint.
+Available to inspect via `/_openapi/ui` endpoint.
 
 ## FAQ
 
@@ -77,6 +78,6 @@ time.
 
 ## Licensing
 
-I'm not sure everyone will ever need this, but:
+I'm not sure anyone will ever need this, but:
 
 MIT / Etki / 2018
