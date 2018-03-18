@@ -1,0 +1,20 @@
+filter:
+  paths:
+    - src/main/java/
+build:
+  environment:
+    sdkman:
+        - gradle@4.6
+  tests:
+    stop_on_failure: true
+    override:
+      - gradle test
+      - gradle shadowJar
+      - command: ./bin/console serve
+        background: true
+      - ./bin/console await
+      - gradle integrationTest
+      - ./bin/console shutdown
+checks:
+  java:
+    code_rating: true
