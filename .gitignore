@@ -1,0 +1,13 @@
+# IDE files
+/.idea
+/nbproject
+/.settings
+
+# Gradle wrapper
+/gradlew
+/gradlew.bat
+/gradle
+
+# Build artifacts
+/.gradle
+/build

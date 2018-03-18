@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'net.ltgt.apt' version '0.10'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
+}
+
+group 'me.etki'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    undertowVersion = '2.0.1.Final'
+    guiceVersion = '4.2.0'
+    lombokVersion = '1.16.20'
+    slf4jVersion = '1.7.25'
+    logbackVersion = '1.2.3'
+    googleOptionsVersion = '1.0.0'
+    jcommanderVersion = '1.72'
+    h2Version = '1.4.196'
+    vertXVersion = '3.5.1'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'me.etki.tasks.revolving.EntryPoint'
+        )
+    }
+}
+
+shadowJar {
+    classifier = 'shadow'
+}
+
+dependencies {
+    compile group: 'io.undertow', name: 'undertow-core', version: undertowVersion
+    compile group: 'io.undertow', name: 'undertow-servlet', version: undertowVersion
+    compile group: 'com.google.inject', name: 'guice', version: guiceVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    compile group: 'com.beust', name: 'jcommander', version: jcommanderVersion
+    compile group: 'com.h2database', name: 'h2', version: h2Version
+    compile group: 'io.vertx', name: 'vertx-web', version: vertXVersion
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+}
