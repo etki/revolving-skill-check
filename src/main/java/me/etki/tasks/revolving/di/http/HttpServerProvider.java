@@ -1,4 +1,4 @@
-package me.etki.tasks.revolving.di.vertx;
+package me.etki.tasks.revolving.di.http;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;

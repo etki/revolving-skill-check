@@ -4,6 +4,7 @@ import com.github.rvesse.airline.annotations.Command;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.vertx.core.http.HttpServer;
+import io.vertx.ext.web.Router;
 import me.etki.tasks.revolving.cli.CliCommand;
 import me.etki.tasks.revolving.cli.options.DatabaseOptions;
 import me.etki.tasks.revolving.cli.options.ServerOptions;
@@ -28,13 +29,7 @@ public class ServeCommand implements CliCommand {
         //noinspection CodeBlock2Expr
         container
                 .getInstance(HttpServer.class)
-                .requestHandler(request -> {
-                    request
-                            .response()
-                            .setChunked(true)
-                            .write("Hello world!")
-                            .end();
-                })
+                .requestHandler(container.getInstance(Router.class)::accept)
                 .listen()
                 .requestStream()
                 .endHandler(promise::complete);
