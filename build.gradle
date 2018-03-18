@@ -19,10 +19,11 @@ ext {
     lombokVersion = '1.16.20'
     slf4jVersion = '1.7.25'
     logbackVersion = '1.2.3'
-    googleOptionsVersion = '1.0.0'
     jcommanderVersion = '1.72'
     h2Version = '1.4.196'
     vertXVersion = '3.5.1'
+    governatorVersion = '1.17.5'
+    asyncHttpClientVersion = '2.4.4'
 }
 
 jar {
@@ -46,6 +47,8 @@ dependencies {
     compile group: 'com.beust', name: 'jcommander', version: jcommanderVersion
     compile group: 'com.h2database', name: 'h2', version: h2Version
     compile group: 'io.vertx', name: 'vertx-web', version: vertXVersion
+    compile group: 'com.netflix.governator', name: 'governator', version: governatorVersion
+    compile group: 'org.asynchttpclient', name: 'async-http-client', version: asyncHttpClientVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
