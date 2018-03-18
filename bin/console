@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="$(realpath "$(dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+set -euxo pipefail
+
+PROJECT_ROOT="$(readlink -f "$(dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
 JAR="$(find "$PROJECT_ROOT"/build -name '*-shadow.jar')"
 
 if [ -z "$JAR" ]; then
