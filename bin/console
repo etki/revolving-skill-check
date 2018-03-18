@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+PROJECT_ROOT="$(realpath "$(dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
+JAR="$(find "$PROJECT_ROOT"/build -name '*-shadow.jar')"
+
+if [ -z "$JAR" ]; then
+    echo "Couldn't find the jar, are you sure it's been compiled?"
+    exit 1
+fi
+
+java -jar "$JAR" "$@"

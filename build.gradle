@@ -50,3 +50,7 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 }
+
+task integrationTest(type: Test) {
+
+}
