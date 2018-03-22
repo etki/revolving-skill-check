@@ -2,6 +2,9 @@ openapi: '3.0.1'
 info:
   version: 1.0.0
   title: Money Transfer Service API
+servers:
+  - url: /v1
+    description: localhost
 components:
   schemas:
     JsonProblem:
@@ -120,12 +123,16 @@ components:
       properties:
         color:
           $ref: '#/components/schemas/HealthColorEnum'
-    DecimalValuePayload:
+    DecimalValueContainer:
       required: [value]
       properties:
         value:
           type: string
           format: decimal
+    Acknowledgement:
+      properties:
+        acknowledged:
+          type: boolean
   parameters:
     path.id:
       in: path
@@ -151,7 +158,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DecimalValuePayload'
+            $ref: '#/components/schemas/DecimalValueContainer'
     Transfer:
       content:
         application/json:
@@ -175,6 +182,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/JsonProblem.Invalid'
+    DecimalValue:
+      description: Decimal value
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DecimalValueContainer'
     Account:
       description: Single account
       content:
@@ -211,6 +224,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RatePage'
+    Acknowledgement:
+      description: Operation acknowledgement
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Acknowledgement'
 paths:
   /_health:
     get:
@@ -240,6 +259,12 @@ paths:
       responses:
         200:
           description: This very HTML document
+  /_shutdown:
+    post:
+      summary: Shuts down server (CI purposes only)
+      responses:
+        200:
+          $ref: '#/components/responses/Acknowledgement'
   /account:
     get:
       summary: Account listing
@@ -271,15 +296,15 @@ paths:
         404:
           $ref: '#/components/responses/404'
   /account/{id}/balance:
-    parameters:
-      - $ref: '#/components/parameters/path.id'
     patch:
       summary: Account balance alteration
+      parameters:
+        - $ref: '#/components/parameters/path.id'
       requestBody:
         $ref: '#/components/requestBodies/DecimalValue'
       responses:
         200:
-          $ref: '#/components/responses/Account'
+          $ref: '#/components/responses/DecimalValue'
         404:
           $ref: '#/components/responses/404'
   /rate:
