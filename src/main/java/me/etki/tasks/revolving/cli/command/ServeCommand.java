@@ -8,8 +8,12 @@ import io.vertx.ext.web.Router;
 import me.etki.tasks.revolving.cli.CliCommand;
 import me.etki.tasks.revolving.cli.options.DatabaseOptions;
 import me.etki.tasks.revolving.cli.options.ServerOptions;
+import me.etki.tasks.revolving.concurrent.CompletableFutures;
+import me.etki.tasks.revolving.database.MigrationService;
 import me.etki.tasks.revolving.di.configuration.ConfigurationModule;
 import me.etki.tasks.revolving.service.LifecycleManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -19,6 +23,8 @@ import java.util.concurrent.CompletableFuture;
 @Command(name = "serve", description = "Spins up internal server")
 public class ServeCommand implements CliCommand {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServeCommand.class);
+
     @Inject
     private DatabaseOptions database = new DatabaseOptions();
 
@@ -27,14 +33,19 @@ public class ServeCommand implements CliCommand {
 
     @Override
     public CompletableFuture<Void> run(Injector container) {
-        container
-                .getInstance(HttpServer.class)
-                .requestHandler(container.getInstance(Router.class)::accept)
-                .listen()
-                .requestStream();
-        return container
-                .getInstance(LifecycleManager.class)
-                .getShutdownFuture();
+        MigrationService migrations = container.getInstance(MigrationService.class);
+        return CompletableFutures
+                .execute(migrations::migrate)
+                .thenCompose(nothing -> {
+                    container
+                            .getInstance(HttpServer.class)
+                            .requestHandler(container.getInstance(Router.class)::accept)
+                            .listen();
+                    LOGGER.info("Server is up and running, have a nice flight");
+                    return container
+                            .getInstance(LifecycleManager.class)
+                            .getShutdownFuture();
+                });
     }
 
     @Override

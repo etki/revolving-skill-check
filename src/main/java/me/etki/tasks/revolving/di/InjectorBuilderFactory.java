@@ -3,6 +3,7 @@ package me.etki.tasks.revolving.di;
 import com.netflix.governator.guice.LifecycleInjector;
 import com.netflix.governator.guice.LifecycleInjectorBuilder;
 import me.etki.tasks.revolving.di.api.ApiModule;
+import me.etki.tasks.revolving.di.database.DatabaseModule;
 import me.etki.tasks.revolving.di.http.HttpModule;
 import me.etki.tasks.revolving.di.misc.MiscModule;
 import me.etki.tasks.revolving.di.service.ServiceModule;
@@ -20,6 +21,7 @@ public class InjectorBuilderFactory {
                 .withAdditionalModules(
                         new VertXModule(),
                         new HttpModule(),
+                        new DatabaseModule(),
                         new ServiceModule(),
                         new ApiModule(),
                         new MiscModule()

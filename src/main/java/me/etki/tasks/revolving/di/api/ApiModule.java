@@ -1,7 +1,7 @@
 package me.etki.tasks.revolving.di.api;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import com.netflix.governator.guice.lazy.LazySingletonScope;
 import me.etki.tasks.revolving.api.client.ApiClient;
 import me.etki.tasks.revolving.api.client.Transport;
 
@@ -11,9 +11,9 @@ public class ApiModule extends AbstractModule {
     protected void configure() {
         bind(Transport.class)
                 .toProvider(TransportProvider.class)
-                .in(Singleton.class);
+                .in(LazySingletonScope.get());
         bind(ApiClient.class)
                 .toProvider(ApiClientProvider.class)
-                .in(Singleton.class);
+                .in(LazySingletonScope.get());
     }
 }

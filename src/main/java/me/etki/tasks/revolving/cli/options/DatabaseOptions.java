@@ -11,7 +11,7 @@ public class DatabaseOptions {
     @Getter
     @Setter
     @Option(name = {"--jdbc", "-d"})
-    private String jdbcUrl = "h2:mem";
+    private String jdbcUrl = "h2:mem:revolving;DB_CLOSE_DELAY=-1";
 
     public DatabaseConfiguration toConfiguration() {
         return new DatabaseConfiguration().setJdbcUrl(jdbcUrl);
