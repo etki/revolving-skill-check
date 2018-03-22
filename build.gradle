@@ -21,13 +21,12 @@ ext {
     jcommanderVersion = '1.72'
     h2Version = '1.4.196'
     vertXVersion = '3.5.1'
+    restVertXVersion = '0.8.1'
     governatorVersion = '1.17.5'
-    asyncHttpClientVersion = '2.4.4'
     airlineVersion = '2.3.0'
     hibernateValidatorVersion = '6.0.8.Final'
     elApiVersion = '3.0.0'
     fastClassPathScannerVersion = '2.18.1'
-    restVertXVersion = '0.8.1'
     swaggerUiVersion = '3.12.1'
 }
 
@@ -50,14 +49,14 @@ dependencies {
     compile group: 'com.beust', name: 'jcommander', version: jcommanderVersion
     compile group: 'com.h2database', name: 'h2', version: h2Version
     compile group: 'io.vertx', name: 'vertx-web', version: vertXVersion
+    compile group: 'io.vertx', name: 'vertx-web-client', version: vertXVersion
+    compile group: 'com.zandero', name: 'rest.vertx', version: restVertXVersion
     compile group: 'com.netflix.governator', name: 'governator', version: governatorVersion
-    compile group: 'org.asynchttpclient', name: 'async-http-client', version: asyncHttpClientVersion
     compile group: 'com.github.rvesse', name: 'airline', version: airlineVersion
     compile group: 'org.hibernate', name: 'hibernate-validator', version: hibernateValidatorVersion
     compile group: 'javax.el', name: 'javax.el-api', version: elApiVersion
     compile group: 'org.glassfish', name: 'javax.el', version: elApiVersion
     compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: fastClassPathScannerVersion
-    compile group: 'com.zandero', name: 'rest.vertx', version: restVertXVersion
     compile group: 'org.webjars', name: 'swagger-ui', version: swaggerUiVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion

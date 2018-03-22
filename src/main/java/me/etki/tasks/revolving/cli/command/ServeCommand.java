@@ -9,6 +9,7 @@ import me.etki.tasks.revolving.cli.CliCommand;
 import me.etki.tasks.revolving.cli.options.DatabaseOptions;
 import me.etki.tasks.revolving.cli.options.ServerOptions;
 import me.etki.tasks.revolving.di.configuration.ConfigurationModule;
+import me.etki.tasks.revolving.service.LifecycleManager;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Command(name = "serve", description = "Spins up internal server")
 public class ServeCommand implements CliCommand {
+
     @Inject
     private DatabaseOptions database = new DatabaseOptions();
 
@@ -25,15 +27,14 @@ public class ServeCommand implements CliCommand {
 
     @Override
     public CompletableFuture<Void> run(Injector container) {
-        CompletableFuture<Void> promise = new CompletableFuture<>();
-        //noinspection CodeBlock2Expr
         container
                 .getInstance(HttpServer.class)
                 .requestHandler(container.getInstance(Router.class)::accept)
                 .listen()
-                .requestStream()
-                .endHandler(promise::complete);
-        return promise;
+                .requestStream();
+        return container
+                .getInstance(LifecycleManager.class)
+                .getShutdownFuture();
     }
 
     @Override

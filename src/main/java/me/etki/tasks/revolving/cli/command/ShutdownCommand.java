@@ -4,6 +4,7 @@ import com.github.rvesse.airline.annotations.Command;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import me.etki.tasks.revolving.api.client.ApiClient;
 import me.etki.tasks.revolving.cli.CliCommand;
 import me.etki.tasks.revolving.cli.options.ServerOptions;
 import me.etki.tasks.revolving.di.configuration.ConfigurationModule;
@@ -23,8 +24,11 @@ public class ShutdownCommand implements CliCommand {
 
     @Override
     public CompletableFuture<Void> run(Injector container) {
-        LOGGER.warn("Not implemented yet");
-        return CompletableFuture.completedFuture(null);
+        LOGGER.info("Performing remote shutdown");
+        return container
+                .getInstance(ApiClient.class)
+                .shutdown()
+                .thenRun(() -> LOGGER.info("Successfully shut down remote application"));
     }
 
     @Override
