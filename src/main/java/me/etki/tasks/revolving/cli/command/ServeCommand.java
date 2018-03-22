@@ -44,7 +44,7 @@ public class ServeCommand implements CliCommand {
                     LOGGER.info("Server is up and running, have a nice flight");
                     return container
                             .getInstance(LifecycleManager.class)
-                            .getShutdownFuture();
+                            .getShutdownRequest();
                 });
     }
 
