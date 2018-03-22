@@ -28,7 +28,7 @@ public class ShutdownController {
     @POST
     public Future<Acknowledgement> executionAction() {
         LOGGER.info("Received shutdown call");
-        manager.shutdown();
+        manager.requestShutdown();
         return Future.succeededFuture(new Acknowledgement(true));
     }
 }

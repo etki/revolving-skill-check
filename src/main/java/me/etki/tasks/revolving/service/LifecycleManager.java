@@ -18,15 +18,24 @@ public class LifecycleManager {
     @Getter
     private final CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
 
+    @Getter
+    private final CompletableFuture<Void> shutdownRequest = new CompletableFuture<>();
+
     @Inject
     public LifecycleManager(VertXSingletonFactory vertx) {
         this.vertx = vertx;
+    }
+
+    public CompletableFuture<Void> requestShutdown() {
+        shutdownRequest.complete(null);
+        return shutdownFuture;
     }
 
     public CompletableFuture<Void> shutdown() {
         LOGGER.info("Shutting down application");
         return closeVertX()
                 .thenRun(() -> LOGGER.info("Successfully shut down application"))
+                .thenAccept(shutdownRequest::complete)
                 .thenAccept(shutdownFuture::complete);
     }
     private CompletableFuture<Void> closeVertX() {
