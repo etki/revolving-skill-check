@@ -1,7 +1,11 @@
 package me.etki.tasks.revolving.concurrent;
 
+import io.vertx.core.Future;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("WeakerAccess")
 public class CompletableFutures {
@@ -34,5 +38,19 @@ public class CompletableFutures {
             task.execute();
             return null;
         });
+    }
+
+    public static <T> Future<T> toVertXFuture(CompletableFuture<T> future) {
+        Future<T> result = Future.future();
+        future
+                .thenAccept(result::complete)
+                .exceptionally(error -> {
+                    while (error instanceof CompletionException || error instanceof ExecutionException) {
+                        error = error.getCause();
+                    }
+                    result.fail(error);
+                    return null;
+                });
+        return result;
     }
 }

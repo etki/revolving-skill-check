@@ -8,7 +8,17 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import me.etki.tasks.revolving.server.ConstraintViolationExceptionHandler;
-import me.etki.tasks.revolving.server.controller.*;
+import me.etki.tasks.revolving.server.ContentionExceptionHandler;
+import me.etki.tasks.revolving.server.IllegalArgumentExceptionHandler;
+import me.etki.tasks.revolving.server.ResourceNotFoundExceptionHandler;
+import me.etki.tasks.revolving.server.RouteNotFoundHandler;
+import me.etki.tasks.revolving.server.controller.AccountBalanceController;
+import me.etki.tasks.revolving.server.controller.AccountController;
+import me.etki.tasks.revolving.server.controller.HealthController;
+import me.etki.tasks.revolving.server.controller.RateController;
+import me.etki.tasks.revolving.server.controller.ShutdownController;
+import me.etki.tasks.revolving.server.controller.SwaggerUIController;
+import me.etki.tasks.revolving.server.controller.TransferController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,8 +35,9 @@ public class RouterProvider implements Provider<Router> {
 
     @Override
     public Router get() {
-        List<Class> controllers = Arrays.asList(
+        List<Class<?>> controllers = Arrays.asList(
                 AccountController.class,
+                AccountBalanceController.class,
                 HealthController.class,
                 RateController.class,
                 ShutdownController.class,
@@ -36,6 +47,10 @@ public class RouterProvider implements Provider<Router> {
         Router router = new RestBuilder(vertx)
                 .register(controllers.stream().map(injector::getInstance).toArray())
                 .errorHandler(ConstraintViolationExceptionHandler.class)
+                .errorHandler(IllegalArgumentExceptionHandler.class)
+                .errorHandler(ResourceNotFoundExceptionHandler.class)
+                .errorHandler(ContentionExceptionHandler.class)
+                .notFound(RouteNotFoundHandler.class)
                 .build();
         router
                 .route("/v1/_openapi/schema.yml")
@@ -43,7 +58,7 @@ public class RouterProvider implements Provider<Router> {
         router
                 .route("/v1/_openapi/*")
                 // ooh noes that's a hardcoded version
-                .handler(StaticHandler.create("META-INF/resources/webjars/swagger-ui/3.12.1"));
+                .handler(StaticHandler.create("META-INF/resources/webjars/swagger-ui/3.13.0"));
         return router;
     }
 }

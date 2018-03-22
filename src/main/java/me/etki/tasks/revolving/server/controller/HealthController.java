@@ -3,13 +3,14 @@ package me.etki.tasks.revolving.server.controller;
 import io.vertx.core.Future;
 import me.etki.tasks.revolving.api.HealthColor;
 import me.etki.tasks.revolving.api.ServiceStatus;
+import me.etki.tasks.revolving.server.Routes;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/v1/_health")
+@Path(Routes.HEALTH)
 @Produces(MediaType.APPLICATION_JSON)
 public class HealthController {
 

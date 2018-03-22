@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0004
+      author: etki
+      changes:
+        - renameColumn:
+            tableName: account
+            oldColumnName: amount
+            newColumnName: balance
+            columnDataType: decimal(21, 3)

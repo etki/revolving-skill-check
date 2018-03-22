@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,4 +22,10 @@ public class Rate {
     @Getter
     @Setter
     private BigDecimal value;
+    @Getter
+    @Setter
+    private ZonedDateTime createdAt;
+    @Getter
+    @Setter
+    private ZonedDateTime updatedAt;
 }

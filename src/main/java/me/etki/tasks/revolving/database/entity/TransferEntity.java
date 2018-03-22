@@ -3,6 +3,7 @@ package me.etki.tasks.revolving.database.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import me.etki.tasks.revolving.api.Transfer;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -53,10 +54,20 @@ public class TransferEntity {
     @Getter
     @Setter
     @Column(name = "executed_at")
-    private Date executedAt;
+    private ZonedDateTime executedAt;
 
     @PrePersist
     public void prePersistHook() {
-        executedAt = new Date();
+        executedAt = ZonedDateTime.now();
+    }
+
+    public Transfer toDomainEntity() {
+        return new Transfer()
+                .setId(id)
+                .setSource(source)
+                .setTarget(target)
+                .setAmount(amount)
+                .setCurrency(currency)
+                .setExecutedAt(executedAt);
     }
 }

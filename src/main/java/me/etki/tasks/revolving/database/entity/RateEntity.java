@@ -1,8 +1,11 @@
 package me.etki.tasks.revolving.database.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.etki.tasks.revolving.api.Rate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -17,7 +20,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "rate")
@@ -38,25 +41,36 @@ public class RateEntity {
     @Setter
     @NotNull
     @Column(name = "created_at")
-    private Date createdAt;
+    private ZonedDateTime createdAt;
     @Getter
     @Setter
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private ZonedDateTime updatedAt;
 
     @PrePersist
     public void prePersistHook() {
-        createdAt = new Date();
-        updatedAt = new Date();
+        createdAt = ZonedDateTime.now();
+        updatedAt = createdAt;
     }
 
     @PreUpdate
     public void preUpdateHook() {
-        updatedAt = new Date();
+        updatedAt = ZonedDateTime.now();
+    }
+
+    public Rate toDomainEntity() {
+        return (new Rate())
+                .setSource(this.id.source)
+                .setTarget(this.id.target)
+                .setValue(this.value)
+                .setCreatedAt(createdAt)
+                .setUpdatedAt(updatedAt);
     }
 
     @SuppressWarnings("WeakerAccess")
     @Embeddable
+    @NoArgsConstructor
+    @AllArgsConstructor
     @EqualsAndHashCode
     public static class Identifier implements Serializable {
         public static final long serialVersionUID = 1;
@@ -70,5 +84,9 @@ public class RateEntity {
         @NotBlank
         @Column
         private String target;
+
+        public Identifier normalize() {
+            return new Identifier(source.toUpperCase(), target.toUpperCase());
+        }
     }
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Accessors(chain = true)
@@ -14,5 +15,14 @@ public class Account {
     private UUID id;
     @Getter
     @Setter
-    private BigDecimal amount;
+    private BigDecimal balance;
+    @Getter
+    @Setter
+    private String currency;
+    @Getter
+    @Setter
+    private ZonedDateTime createdAt;
+    @Getter
+    @Setter
+    private ZonedDateTime updatedAt;
 }

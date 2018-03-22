@@ -275,7 +275,7 @@ paths:
         200:
           $ref: '#/components/responses/AccountPage'
         404:
-          $ref: '#/components/schemas/responses/404'
+          $ref: '#/components/responses/404'
     post:
       summary: Account creation
       requestBody:
@@ -296,7 +296,7 @@ paths:
         404:
           $ref: '#/components/responses/404'
   /account/{id}/balance:
-    patch:
+    put:
       summary: Account balance alteration
       parameters:
         - $ref: '#/components/parameters/path.id'

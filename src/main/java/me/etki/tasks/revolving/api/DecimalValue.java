@@ -13,6 +13,8 @@ public class DecimalValue {
     @Getter
     @Setter
     @NonNull
-    @DecimalMin(value = "0", inclusive = false)
+    @DecimalMin(value = "0", inclusive = false, groups = Positive.class)
     private BigDecimal value;
+
+    public interface Positive {}
 }

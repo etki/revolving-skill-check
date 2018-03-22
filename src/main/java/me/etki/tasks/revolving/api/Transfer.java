@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Accessors(chain = true)
@@ -17,11 +18,14 @@ public class Transfer {
     private UUID source;
     @Getter
     @Setter
-    private UUID destination;
+    private UUID target;
     @Getter
     @Setter
     private BigDecimal amount;
     @Getter
     @Setter
     private String currency;
+    @Getter
+    @Setter
+    private ZonedDateTime executedAt;
 }
