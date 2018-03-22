@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0003
+      author: etki
+      changes:
+        - createTable:
+            tableName: transfer
+            columns:
+              - column:
+                  name: id
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: source
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(21, 3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_at
+                  type: datetime
+                  constraints:
+                    nullable: false

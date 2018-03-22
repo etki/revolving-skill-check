@@ -3,6 +3,7 @@ package me.etki.tasks.revolving.concurrent;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("WeakerAccess")
 public class CompletableFutures {
     public static final CompletableFuture<Void> VOID = completed(null);
 
@@ -26,5 +27,12 @@ public class CompletableFutures {
         } catch (Exception e) {
             return exceptional(e);
         }
+    }
+
+    public static CompletableFuture<Void> execute(Task task) {
+        return execute(() -> {
+            task.execute();
+            return null;
+        });
     }
 }
