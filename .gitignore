@@ -11,3 +11,6 @@
 # Build artifacts
 /.gradle
 /build
+
+# Vert.X cache files
+.vertx

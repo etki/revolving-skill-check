@@ -25,6 +25,7 @@ public class ConstraintViolationExceptionHandler implements ExceptionHandler<Con
         JsonProblem problem = new JsonProblem()
                 .setStatus(400)
                 .setTitle("Invalid input")
+                .setDetail(result.getMessage())
                 .setExtra(violations);
         response.setChunked(true).setStatusCode(400).end(Json.encode(problem));
     }

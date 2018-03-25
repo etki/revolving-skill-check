@@ -6,8 +6,11 @@ PROJECT_ROOT="$(readlink -f "$(dirname "$( dirname "${BASH_SOURCE[0]}" )" )" )"
 JAR="$(find "$PROJECT_ROOT"/build -name '*-shadow.jar')"
 
 if [ -z "$JAR" ]; then
-    echo "Couldn't find the jar, are you sure it's been compiled?"
-    exit 1
+    echo "Couldn't find the jar, compiling"
+    cd "$PROJECT_ROOT"
+    gradle wrapper --gradle-version 4.6
+    gradle shadowJar
+    echo "Compiled shadow jar"
 fi
 
 java -jar "$JAR" "$@"

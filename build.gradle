@@ -27,11 +27,12 @@ ext {
     hibernateValidatorVersion = '6.0.8.Final'
     elApiVersion = '3.0.0'
     fastClassPathScannerVersion = '2.18.1'
-    swaggerUiVersion = '3.12.1'
+    swaggerUiVersion = '3.13.0'
     hikariCPVersion = '2.7.8'
     hibernateVersion = '5.2.15.Final'
     liquibaseVersion = '3.5.5'
     liquibaseLoggerVersion = '2.0.0'
+    jacksonVersion = '2.9.3'
 }
 
 jar {
@@ -66,6 +67,8 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernateVersion
     compile group: 'org.liquibase', name: 'liquibase-core', version: liquibaseVersion
     compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibaseLoggerVersion
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
