@@ -1,5 +1,6 @@
 package me.etki.tasks.revolving.api;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -9,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Accessors(chain = true)
+@EqualsAndHashCode(of = {"id"})
 public class Transfer {
     @Getter
     @Setter

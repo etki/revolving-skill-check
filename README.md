@@ -50,10 +50,34 @@ In a nutshell, you can create new accounts with specific currencies,
 define currency exchange rates, and then execute transfers using various
 currencies.
 
+## Testing
+
+Tests don't bring application up by themselves, so it has to be done 
+manually:
+
+```bash
+bin/console serve &
+bin/console await
+./gradlew :clean :integrationTest :allureReport :allureServe
+```
+
+To customize host and port one can use `mts.host` and `mts.port` system
+properties:
+
+```bash
+./gradlew -Dmts.host=192.168.0.3 -Dmts.port=80 :clean :integrationTest :allureReport :allureServe
+```
+
 ## Known issues
 
 - The domain logic shouldn't throw exceptions but rather return result
 objects. Sadly i didn't have enough time for that.
+- Lots of constraint violation exceptions are generated manually while
+they should be created from validator output. Sadly, never enough time 
+again.
+- Some parts of code are just little bit messy.
+- Allure really kicks off with request/response attachments but oh god 
+where do i get time for this.
 
 ## FAQ
 

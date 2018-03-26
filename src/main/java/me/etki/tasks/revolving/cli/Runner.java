@@ -20,7 +20,6 @@ public class Runner {
                 .withCommand(ServeCommand.class)
                 .withCommand(AwaitCommand.class)
                 .withCommand(ShutdownCommand.class)
-                .withCommand(TestCommand.class)
                 .build();
         try {
             CliCommand command = runner.parse(args);

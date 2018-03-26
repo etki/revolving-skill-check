@@ -20,11 +20,11 @@ public class AsyncExecutor {
         this.vertx = vertx;
     }
 
-    public <T> CompletableFuture<T> execute(Unit<T> unit) {
+    public <T> CompletableFuture<T> execute(ExecutionUnit<T> unit) {
         return execute(unit, 10);
     }
 
-    public <T> CompletableFuture<T> execute(Unit<T> unit, int attempts) {
+    public <T> CompletableFuture<T> execute(ExecutionUnit<T> unit, int attempts) {
         CompletableFuture<T> synchronizer = new CompletableFuture<>();
         vertx.<T>executeBlocking(future -> {
             EntityManager manager = factory.createEntityManager();
