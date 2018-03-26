@@ -44,11 +44,13 @@ passes arguments to it.
 
 ## API
 
-Available to inspect via `/_openapi/ui` endpoint.
+Available to inspect via `/v1/_openapi` endpoint.
 
 In a nutshell, you can create new accounts with specific currencies,
 define currency exchange rates, and then execute transfers using various
-currencies.
+currencies. Rates are used to convert currencies (if account has 
+different currency rather than transfer request). Of course that wasn't
+necessary, but added more fun.
 
 ## Testing
 
@@ -78,6 +80,9 @@ again.
 - Some parts of code are just little bit messy.
 - Allure really kicks off with request/response attachments but oh god 
 where do i get time for this.
+- Even using BigDecimal rounds everything up after certain point (three
+decimal digits in this application); i don't know how it is usually 
+handled in bank operations. 
 
 ## FAQ
 

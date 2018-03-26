@@ -20,7 +20,9 @@ jobs:
       - run: ./bin/console await
       - run: ./gradlew integrationTest
       - run: ./bin/console shutdown
-      - run: ./gradlew allureReport
+      - run:
+          command: ./gradlew allureReport
+          when: always
       - save_cache:
           paths:
             - ~/.gradle

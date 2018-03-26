@@ -59,6 +59,8 @@ public class RateController {
             DecimalValue value) {
 
         validator.assertValid(value, DecimalValue.Positive.class);
-        return CompletableFutures.toVertXFuture(manager.set(source, target, value.getValue()));
+        return CompletableFutures.toVertXFuture(
+                manager.set(source, target, value.normalize().getValue())
+        );
     }
 }
