@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +82,10 @@ public class TransferManager {
         private final TransferInput input;
 
         public Transfer execute() {
+            if (input.getSource().equals(input.getTarget())) {
+                String message = "Tried to perform transfer on the same account";
+                throw new ConstraintViolationException(message, Collections.emptySet());
+            }
             AccountEntity source = getAccount(input.getSource());
             AccountEntity target = getAccount(input.getTarget());
             LOGGER.info(
@@ -92,15 +97,15 @@ public class TransferManager {
             );
             RateEntity withdrawalRate = null;
             RateEntity topUpRate = null;
-            if (!target.getCurrency().equals(input.getCurrency())) {
-                topUpRate = getRate(target.getCurrency(), input.getCurrency());
-            }
             if (!source.getCurrency().equals(input.getCurrency())) {
                 withdrawalRate = getRate(source.getCurrency(), input.getCurrency());
             }
+            if (!target.getCurrency().equals(input.getCurrency())) {
+                topUpRate = getRate(input.getCurrency(), target.getCurrency());
+            }
             BigDecimal withdrawal = Optional
                     .ofNullable(withdrawalRate)
-                    .map(rate -> input.getAmount().multiply(rate.getValue()))
+                    .map(rate -> input.getAmount().divide(rate.getValue(), RoundingMode.HALF_UP))
                     .orElse(input.getAmount());
             BigDecimal topUp = Optional
                     .ofNullable(topUpRate)

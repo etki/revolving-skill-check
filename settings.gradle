@@ -1,2 +1,8 @@
-rootProject.name = 'revolving-skill-check'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        jcenter()
+    }
+}
 
+rootProject.name = 'revolving-skill-check'

@@ -13,4 +13,4 @@ if [ -z "$JAR" ]; then
     echo "Compiled shadow jar"
 fi
 
-java -jar "$JAR" "$@"
+exec java -jar "$JAR" "$@"

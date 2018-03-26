@@ -1,8 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'io.qameta.allure', name: 'allure-gradle', version: '2.5'
+    }
+}
+
 plugins {
     id 'java'
     id 'net.ltgt.apt' version '0.10'
     id 'com.github.johnrengelman.shadow' version '2.0.2'
 }
+
+apply plugin: 'io.qameta.allure'
 
 group 'me.etki'
 version '1.0.0-SNAPSHOT'
@@ -11,6 +22,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -33,18 +45,10 @@ ext {
     liquibaseVersion = '3.5.5'
     liquibaseLoggerVersion = '2.0.0'
     jacksonVersion = '2.9.3'
-}
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'me.etki.tasks.revolving.EntryPoint'
-        )
-    }
-}
-
-shadowJar {
-    classifier = 'shadow'
+    allureVersion = '2.6.0'
+    junitVersion = '5.1.0'
+    retrofitVersion = '2.4.0'
 }
 
 dependencies {
@@ -72,8 +76,52 @@ dependencies {
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     apt group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+    testCompile group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofitVersion
+    testCompile group: 'com.squareup.retrofit2', name: 'converter-jackson', version: retrofitVersion
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integration-test/java'
+        }
+        resources
+        compileClasspath += sourceSets.test.compileClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'me.etki.tasks.revolving.EntryPoint'
+        )
+    }
+}
+
+shadowJar {
+    classifier = 'shadow'
+}
+
+allure {
+    version = allureVersion
+    aspectjweaver = true
+    autoconfigure = true
+
+    resultsDir = file('allure/metadata')
+    reportDir = file('allure/report')
+
+    useJUnit5 {
+        version = allureVersion
+    }
 }
 
 task integrationTest(type: Test) {
-
+    systemProperties System.properties as Map<String, ?>
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }

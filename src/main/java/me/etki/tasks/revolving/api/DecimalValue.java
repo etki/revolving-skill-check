@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class DecimalValue {
     @Getter
     @Setter

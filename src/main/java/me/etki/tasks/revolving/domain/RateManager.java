@@ -6,7 +6,9 @@ import me.etki.tasks.revolving.api.Rate;
 import me.etki.tasks.revolving.database.AsyncExecutor;
 import me.etki.tasks.revolving.database.entity.RateEntity;
 
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -60,6 +62,10 @@ public class RateManager {
     public CompletableFuture<Rate> set(String source, String target, BigDecimal value) {
         return executor.execute(manager -> {
             RateEntity.Identifier id = new RateEntity.Identifier(source, target).normalize();
+            if (id.getSource().equals(id.getTarget())) {
+                String message = "Can't create exchange rate for same currency";
+                throw new ConstraintViolationException(message, Collections.emptySet());
+            }
             RateEntity entity = Optional
                     .ofNullable(manager.find(RateEntity.class, id))
                     .orElseGet(RateEntity::new);
