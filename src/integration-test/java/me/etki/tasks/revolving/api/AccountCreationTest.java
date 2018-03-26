@@ -24,21 +24,12 @@ public class AccountCreationTest {
     }
 
     @Test
-    public void createsWithZeroBalanceIfBalanceNotSet() throws Exception {
-        String currency = "RUR";
-        Response<Account> response = client.createAccount(new AccountInput().setCurrency(currency)).execute();
-        Assertions.assertEquals(200, response.code());
-        Assertions.assertEquals(BigDecimal.ZERO, response.body().getBalance());
-        Assertions.assertEquals(currency, response.body().getCurrency());
-    }
-
-    @Test
     public void allowsCreationWithNegativeBalance() throws Exception {
         BigDecimal balance = BigDecimal.valueOf(-10);
-        AccountInput input = new AccountInput(balance, "RUR");
+        AccountInput input = new AccountInput(balance, "RUR").normalize();
         Response<Account> response = client.createAccount(input).execute();
         Assertions.assertEquals(200, response.code());
-        Assertions.assertEquals(balance, response.body().getBalance());
+        Assertions.assertEquals(0, balance.compareTo(response.body().getBalance()));
     }
 
     @Test

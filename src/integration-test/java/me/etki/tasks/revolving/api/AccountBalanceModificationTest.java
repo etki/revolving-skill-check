@@ -28,6 +28,6 @@ public class AccountBalanceModificationTest {
                 .setAccountBalance(account.getId(), new DecimalValue(balance))
                 .execute();
         Assertions.assertEquals(200, execution.code());
-        Assertions.assertEquals(balance, execution.body().getValue());
+        Assertions.assertEquals(0, balance.compareTo(execution.body().getValue()));
     }
 }

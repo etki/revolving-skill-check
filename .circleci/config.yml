@@ -19,7 +19,9 @@ jobs:
           background: true
       - run: ./bin/console await
       - run: ./gradlew integrationTest
-      - run: ./bin/console shutdown
+      - run:
+          command: ./bin/console shutdown
+          when: always
       - run:
           command: ./gradlew allureReport
           when: always
