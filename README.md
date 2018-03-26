@@ -1,6 +1,6 @@
 # Test task for R company
 
-[![CircleCI/master](https://img.shields.io/circleci/project/github/etki/revolving-skill-check/master.svg?style=flat-square)](https://circleci.com/gh/etki/java-event-sourcing/tree/master)
+[![CircleCI/master](https://img.shields.io/circleci/project/github/etki/revolving-skill-check/master.svg?style=flat-square)](https://circleci.com/gh/etki/revolving-skill-check/tree/master)
 [![Scrutinizer/master](https://img.shields.io/scrutinizer/g/etki/revolving-skill-check/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/etki/revolving-skill-check/?branch=master)
 
 This repository contains test task implementation for secret R company.
