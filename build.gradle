@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'io.qameta.allure'
 
 group 'me.etki'
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 
 sourceCompatibility = 1.8
 
