@@ -20,7 +20,13 @@ jobs:
       - run: ./bin/console await
       - run: ./gradlew integrationTest
       - run: ./bin/console shutdown
+      - run: ./gradlew allureReport
       - save_cache:
           paths:
             - ~/.gradle
+            - ~/.allure
           key: *gradle_cache_key
+      - store_artifacts:
+          path: build/reports/allure/report
+          prefix: allure
+
