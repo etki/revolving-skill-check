@@ -35,7 +35,7 @@ public class AccountBalanceController {
     public Future<DecimalValue> modifyAction(@PathParam("id") UUID id, DecimalValue value) {
         validator.assertValid(value);
         return CompletableFutures
-                .toVertXFuture(manager.setBalance(id, value.getValue()))
+                .toVertXFuture(manager.setBalance(id, value.normalize().getValue()))
                 .map(Account::getBalance)
                 .map(DecimalValue::new);
     }

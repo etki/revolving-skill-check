@@ -2,6 +2,7 @@ package me.etki.tasks.revolving.domain;
 
 import com.google.inject.Inject;
 import lombok.RequiredArgsConstructor;
+import me.etki.tasks.revolving.Constants;
 import me.etki.tasks.revolving.api.Page;
 import me.etki.tasks.revolving.api.Transfer;
 import me.etki.tasks.revolving.api.TransferInput;
@@ -95,22 +96,21 @@ public class TransferManager {
                     input.getSource(),
                     input.getTarget()
             );
-            RateEntity withdrawalRate = null;
-            RateEntity topUpRate = null;
+            BigDecimal withdrawal = input.getAmount();
+            BigDecimal topUp = input.getAmount();
             if (!source.getCurrency().equals(input.getCurrency())) {
-                withdrawalRate = getRate(source.getCurrency(), input.getCurrency());
+                RateEntity withdrawalRate = getRate(source.getCurrency(), input.getCurrency());
+                withdrawal = input
+                        .getAmount()
+                        .divide(withdrawalRate.getValue(), Constants.DECIMAL_SCALE, RoundingMode.HALF_EVEN);
             }
             if (!target.getCurrency().equals(input.getCurrency())) {
-                topUpRate = getRate(input.getCurrency(), target.getCurrency());
+                RateEntity topUpRate = getRate(input.getCurrency(), target.getCurrency());
+                topUp = input
+                        .getAmount()
+                        .multiply(topUpRate.getValue())
+                        .setScale(Constants.DECIMAL_SCALE, RoundingMode.HALF_EVEN);
             }
-            BigDecimal withdrawal = Optional
-                    .ofNullable(withdrawalRate)
-                    .map(rate -> input.getAmount().divide(rate.getValue(), RoundingMode.HALF_UP))
-                    .orElse(input.getAmount());
-            BigDecimal topUp = Optional
-                    .ofNullable(topUpRate)
-                    .map(rate -> input.getAmount().multiply(rate.getValue()))
-                    .orElse(input.getAmount());
             LOGGER.info("Withdrawing `{}` {} from account `{}`", withdrawal, source.getCurrency(), source.getId());
             if (source.getBalance().compareTo(withdrawal) < 0) {
                 String message = "Account " + input.getSource() + " doesn't have enough funds";
